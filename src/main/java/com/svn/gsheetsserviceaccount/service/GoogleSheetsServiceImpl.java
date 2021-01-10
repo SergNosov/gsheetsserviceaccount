@@ -1,7 +1,7 @@
 package com.svn.gsheetsserviceaccount.service;
 
 import com.google.api.services.sheets.v4.Sheets;
-import com.svn.gsheetsoauth2.Global;
+import com.svn.gsheetsserviceaccount.Global;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,10 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
     private Sheets getSheetsService(GoogleConnectionService gc) throws IOException {
         if (this.sheets == null) {
-            this.sheets = new Sheets.Builder(Global.HTTP_TRANSPORT, Global.JSON_FACTORY, gc.getCredentials())
+            this.sheets = new Sheets.Builder(
+                    Global.HTTP_TRANSPORT,
+                    Global.JSON_FACTORY,
+                    gc.getCredentials())
                     .setApplicationName(appName).build();
         }
         return this.sheets;

@@ -61,8 +61,8 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
         } else {
             System.out.println("read data");
             for (List<Object> row : values) {
-                for (int c = 0; c < row.size(); c++) {
-                    System.out.printf("%s ", row.get(c));
+                for (int i = 0; i < row.size(); i++) {
+                    System.out.printf("%s ", row.get(i));
                 }
                 System.out.println();
             }

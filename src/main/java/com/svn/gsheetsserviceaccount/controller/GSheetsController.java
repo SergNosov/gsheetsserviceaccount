@@ -27,7 +27,7 @@ public class GSheetsController {
     }
 
     @GetMapping({"/","/api/sheet"})
-    public ResponseEntity<List<List<Object>>> readGoogleSheet(HttpServletResponse response) throws IOException, GeneralSecurityException {
+    public ResponseEntity<List<List<Object>>> readGoogleSheet(HttpServletResponse response) throws IOException {
 
         List<List<Object>> responseBody = sheetsService.readTable(connectionService);
 

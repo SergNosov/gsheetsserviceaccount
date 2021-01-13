@@ -1,11 +1,14 @@
-package com.svn.gsheetsserviceaccount.service;
+package com.svn.gsheetsserviceaccount.service.impl;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.svn.gsheetsserviceaccount.Global;
+import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
+import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
@@ -55,17 +58,21 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
         return values;
     }
 
+    private List<List<String>> valuesToString(List<List<Object>> objectValues){
+        List<String> stringRow = new ArrayList<>();
+        List<List<String>> stringValues = new ArrayList<>();
+
+//        objectValues.forEach((row)->{ row.forEach((value)->{stringRow} ); });
+
+        return stringValues;
+    }
+
     private void printTable(List<List<Object>> values) {
         if (values == null || values.size() == 0) {
             System.out.println("No data found.");
         } else {
-            System.out.println("read data");
-            for (List<Object> row : values) {
-                for (int i = 0; i < row.size(); i++) {
-                    System.out.printf("%s ", row.get(i));
-                }
-                System.out.println();
-            }
+            System.out.println("Data ftom google sheets:");
+            values.stream().forEach(System.out::println);
         }
     }
 }

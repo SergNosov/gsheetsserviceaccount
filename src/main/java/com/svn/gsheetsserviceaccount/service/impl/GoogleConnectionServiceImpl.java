@@ -1,10 +1,12 @@
-package com.svn.gsheetsserviceaccount.service;
+package com.svn.gsheetsserviceaccount.service.impl;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.svn.gsheetsserviceaccount.Global;
+import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,8 @@ public class GoogleConnectionServiceImpl implements GoogleConnectionService {
     private GoogleCredential googleCredentials = null;
 
     @Autowired
-    public GoogleConnectionServiceImpl(ResourceLoader resourceLoader) {
+    public GoogleConnectionServiceImpl(@Qualifier("webApplicationContext")
+                                                   ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 

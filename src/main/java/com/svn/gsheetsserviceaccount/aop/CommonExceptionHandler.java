@@ -19,7 +19,7 @@ public class CommonExceptionHandler {
         log.info("--- handleAllException:");
         logginException(ex);
 
-        final StringBuilder message = new StringBuilder("--- ")
+        final StringBuilder message = new StringBuilder("--- Ошибка: ")
                 .append(ex.getMessage())
                 .append(";");
 

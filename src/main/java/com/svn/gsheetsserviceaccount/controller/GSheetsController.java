@@ -54,6 +54,8 @@ public class GSheetsController {
         log.info("--- contact: "+contact);
 
         Contact insertedContact = contactRepository.insert(contact);
+         //insertedContact = contactRepository.save(contact);
+
 
         log.info("--- insertedContact: "+System.identityHashCode(insertedContact));
         log.info("--- insertedContact: "+insertedContact);

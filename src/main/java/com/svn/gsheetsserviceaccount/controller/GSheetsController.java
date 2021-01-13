@@ -34,11 +34,11 @@ public class GSheetsController {
     }
 
     @GetMapping({"/","/api/sheet"})
-    public ResponseEntity<List<List<Object>>> readGoogleSheet(HttpServletResponse response) throws IOException {
+    public ResponseEntity<List<List<String>>> readGoogleSheet(HttpServletResponse response) throws IOException {
 
-        List<List<Object>> responseBody = sheetsService.readTable(connectionService);
+        List<List<String>> responseBody = sheetsService.readTable(connectionService);
 
-        return new ResponseEntity<List<List<Object>>>(responseBody, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping("/add")

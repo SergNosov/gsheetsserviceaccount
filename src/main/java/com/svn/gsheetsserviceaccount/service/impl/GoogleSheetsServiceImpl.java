@@ -1,6 +1,8 @@
 package com.svn.gsheetsserviceaccount.service.impl;
 
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.common.base.Functions;
+import com.google.common.collect.Lists;
 import com.svn.gsheetsserviceaccount.Global;
 import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
@@ -33,9 +35,9 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
     }
 
     @Override
-    public List<List<Object>> readTable(GoogleConnectionService connection) throws IOException {
-        final Sheets service = getSheetsService(connection);
-        return readTable(service, spreadsheetId, sheetName);
+    public List<List<String>> readTable(GoogleConnectionService connection) throws IOException {
+        Sheets service = getSheetsService(connection);
+        return readSheets(service, spreadsheetId, sheetName);
     }
 
     private Sheets getSheetsService(GoogleConnectionService gc) throws IOException {
@@ -49,30 +51,30 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
         return this.sheets;
     }
 
-    private List<List<Object>> readTable(Sheets service, String spreadsheetId, String sheetName) throws IOException {
+    private List<List<String>> readSheets(Sheets service, String spreadsheetId, String sheetName) throws IOException {
         ValueRange table = service.spreadsheets().values().get(spreadsheetId, sheetName).execute();
 
-        List<List<Object>> values = table.getValues();
-        printTable(values);
-
-        return values;
-    }
-
-    private List<List<String>> valuesToString(List<List<Object>> objectValues){
-        List<String> stringRow = new ArrayList<>();
-        List<List<String>> stringValues = new ArrayList<>();
-
-//        objectValues.forEach((row)->{ row.forEach((value)->{stringRow} ); });
+        List<List<String>> stringValues = valuesToString(table.getValues());
+        printTable(stringValues);
 
         return stringValues;
     }
 
-    private void printTable(List<List<Object>> values) {
-        if (values == null || values.size() == 0) {
-            System.out.println("No data found.");
+    private List<List<String>> valuesToString(List<List<Object>> objectValues){
+        List<List<String>> stringValues = new ArrayList<>();
+
+        for (List<Object> objectsRow: objectValues){
+            stringValues.add(Lists.transform(objectsRow, Functions.toStringFunction()));
+        }
+        return stringValues;
+    }
+
+    private void printTable(List<List<String>> stringValues) {
+        if (stringValues == null || stringValues.size() == 0) {
+            System.err.println("No data found.");
         } else {
-            System.out.println("Data ftom google sheets:");
-            values.stream().forEach(System.out::println);
+            System.out.println("Data from google sheets:");
+            stringValues.stream().forEach(System.out::println);
         }
     }
 }

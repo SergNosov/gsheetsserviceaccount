@@ -23,20 +23,32 @@ public class Contact {
     private final String email;
 
     /**
-     * Статический метод create(List<Object> values) используется для
-     * созданиея объекта класса Contact из списка объектов(строк)
+     * Статический метод create(List<String> values) используется для
+     * созданиея объекта класса Contact из списка строк
      * полученных из внешнего источника.
-     * @param values список объектов (String) присваиваемых полям класса Contact
+     *
+     * @param values список(String) присваиваемых полям класса Contact
      * @return Объект класса Contact c уникальным значением id типа org.bson.types.ObjectId
      * @throws IllegalArgumentException если values = null или values.isEmpty()=true;
      */
 
-    public static Contact create(List<Object> values){
-        Assert.notNull(values,"Значение values не должно быть null.");
-        Assert.notEmpty(values,"Значение values не должно быть пустым.");
+    public static Contact create(List<String> values) {
+        try {
+            Assert.notNull(values, "Значение values не должно быть null.");
+            Assert.notEmpty(values, "Значение values не должно быть пустым.");
+            Assert.doesNotContain("@", values.get(3), "Неверное значение email: " + values);
 
-
-
-        return null;
+            Contact contact = new Contact(
+                    ObjectId.get(),
+                    values.get(0),
+                    values.get(1),
+                    values.get(2),
+                    values.get(3)
+            );
+            return contact;
+        } catch (IndexOutOfBoundsException ex) {
+            throw new IllegalArgumentException("--- Навозможно создать контакт из :" + values +
+                    ". Message: " + ex.getMessage());
+        }
     }
 }

@@ -22,6 +22,14 @@ public class Contact {
     private final String phone;
     private final String email;
 
+    protected Contact(ObjectId id, String code, String name, String phone, String email) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
     /**
      * Статический метод create(List<String> values) используется для
      * созданиея объекта класса Contact из списка строк
@@ -29,26 +37,46 @@ public class Contact {
      *
      * @param values список(String) присваиваемых полям класса Contact
      * @return Объект класса Contact c уникальным значением id типа org.bson.types.ObjectId
-     * @throws IllegalArgumentException если values = null или values.isEmpty()=true;
+     * @throws IllegalArgumentException если values = null, values.isEmpty()=true, или название эл.почты не содержит @;
      */
-
     public static Contact create(List<String> values) {
         try {
             Assert.notNull(values, "Значение values не должно быть null.");
             Assert.notEmpty(values, "Значение values не должно быть пустым.");
             Assert.doesNotContain("@", values.get(3), "Неверное значение email: " + values);
 
-            Contact contact = new Contact(
-                    ObjectId.get(),
+            Contact contact = Contact.create(
                     values.get(0),
                     values.get(1),
                     values.get(2),
                     values.get(3)
             );
+
             return contact;
         } catch (IndexOutOfBoundsException ex) {
             throw new IllegalArgumentException("--- Навозможно создать контакт из :" + values +
                     ". Message: " + ex.getMessage());
         }
     }
+
+    /**
+     * Статический метод create(String code, String name, String phone, String email) используется для
+     * созданиея объекта класса Contact из Stirng переменных.
+     * Значение id генерируется используя org.bson.types.ObjectId.get().
+     *
+     * @param code,name,phone,email String переменные присваиваемые полям класса Contact
+     * @return Объект класса Contact c уникальным значением id типа org.bson.types.ObjectId
+     * @throws IllegalArgumentException если значения не содержат сведения, или название эл.почты не содержит @;
+     */
+    public static Contact create(String code, String name, String phone, String email) {
+        Assert.hasText(code, "Значение code (userId) не должно быть пустым.");
+        Assert.hasText(name, "Значение name не должно быть пустым.");
+        Assert.hasText(phone, "Значение phone не должно быть пустым.");
+        Assert.hasText(email, "Значение email не должно быть пустым.");
+        Assert.isTrue(email.contains("@"), "Проверьте наименование электронной почты: " + email);
+
+        Contact contact = new Contact(ObjectId.get(), code, name, phone, email);
+        return contact;
+    }
+
 }

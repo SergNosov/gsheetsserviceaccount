@@ -33,7 +33,7 @@ public class GSheetsController {
         this.sheetsService = sheetsService;
     }
 
-    @GetMapping({"/","/api/sheet"})
+    @GetMapping({"/", "/api/sheet"})
     public ResponseEntity<List<List<String>>> readGoogleSheet(HttpServletResponse response) throws IOException {
 
         List<List<String>> responseBody = sheetsService.readTable(connectionService);
@@ -42,23 +42,24 @@ public class GSheetsController {
     }
 
     @GetMapping("/add")
-    public Contact addContact(){
+    public Contact addContact() {
 
-        Contact contact = new Contact(ObjectId.get(),
+        Contact contact = Contact.create(
                 "12345678",
                 "Новый контакт",
                 "+79146895789",
-                "newContact@mail.ru");
+                "newContact@mail.ru"
+        );
 
-        log.info("--- contact: "+System.identityHashCode(contact));
-        log.info("--- contact: "+contact);
+        log.info("--- contact: " + System.identityHashCode(contact));
+        log.info("--- contact: " + contact);
 
         Contact insertedContact = contactRepository.insert(contact);
-         //insertedContact = contactRepository.save(contact);
+        //insertedContact = contactRepository.save(contact);
 
 
-        log.info("--- insertedContact: "+System.identityHashCode(insertedContact));
-        log.info("--- insertedContact: "+insertedContact);
+        log.info("--- insertedContact: " + System.identityHashCode(insertedContact));
+        log.info("--- insertedContact: " + insertedContact);
 
         return insertedContact;
     }

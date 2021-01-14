@@ -37,14 +37,19 @@ public class ContactServiceImplTests {
     private Contact contact;
 
     @BeforeEach
-    void setUp(){
-        contact = new Contact(ObjectId.get(),"12345","NewContact","91234344","post@mail.kp");
+    void setUp() {
+        contact = Contact.create(
+                "12345",
+                "NewContact",
+                "91234344",
+                "post@mail.kp"
+        );
     }
 
     @Test
     @DisplayName("1. Testing the save contact. Ok.")
     @Order(1)
-    void testSaveContactOk(){
+    void testSaveContactOk() {
         given(contactRepository.save(any(Contact.class))).willReturn(contact);
         Contact savedContact = contactService.save(contact);
 
@@ -54,7 +59,7 @@ public class ContactServiceImplTests {
     @Test
     @DisplayName("2. Testing the save null contact.")
     @Order(2)
-    void testSaveContactIsNull(){
+    void testSaveContactIsNull() {
         IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
                 () -> contactService.save(null)
         );

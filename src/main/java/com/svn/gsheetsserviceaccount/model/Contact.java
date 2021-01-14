@@ -22,6 +22,12 @@ public class Contact {
     private final String phone;
     private final String email;
 
+    /**
+     * Для создания объекта класса Contact использовать статический методы
+     * Contact.create(String code, String name, String phone, String email)
+     * или Contact.create(List<String> values)
+     */
+    @Deprecated
     protected Contact(ObjectId id, String code, String name, String phone, String email) {
         this.id = id;
         this.code = code;
@@ -40,23 +46,19 @@ public class Contact {
      * @throws IllegalArgumentException если values = null, values.isEmpty()=true, или название эл.почты не содержит @;
      */
     public static Contact create(List<String> values) {
-        try {
-            Assert.notNull(values, "Значение values не должно быть null.");
-            Assert.notEmpty(values, "Значение values не должно быть пустым.");
-            Assert.doesNotContain("@", values.get(3), "Неверное значение email: " + values);
+        Assert.notNull(values, "Значение values не должно быть null.");
+        Assert.notEmpty(values, "Значение values не должно быть пустым.");
+        Assert.isTrue(values.size() > 3,
+                "Навозможно создать контакт из передаваемого списка:" + values);
 
-            Contact contact = Contact.create(
-                    values.get(0),
-                    values.get(1),
-                    values.get(2),
-                    values.get(3)
-            );
+        Contact contact = Contact.create(
+                values.get(0),
+                values.get(1),
+                values.get(2),
+                values.get(3)
+        );
 
-            return contact;
-        } catch (IndexOutOfBoundsException ex) {
-            throw new IllegalArgumentException("--- Навозможно создать контакт из :" + values +
-                    ". Message: " + ex.getMessage());
-        }
+        return contact;
     }
 
     /**
@@ -69,7 +71,7 @@ public class Contact {
      * @throws IllegalArgumentException если значения не содержат сведения, или название эл.почты не содержит @;
      */
     public static Contact create(String code, String name, String phone, String email) {
-        Assert.hasText(code, "Значение code (userId) не должно быть пустым.");
+        Assert.hasText(code, "Значение code не должно быть пустым.");
         Assert.hasText(name, "Значение name не должно быть пустым.");
         Assert.hasText(phone, "Значение phone не должно быть пустым.");
         Assert.hasText(email, "Значение email не должно быть пустым.");

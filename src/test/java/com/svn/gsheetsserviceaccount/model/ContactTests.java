@@ -5,8 +5,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -17,29 +18,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ContactTests {
 
-    private static final List<String> valuesGood = Arrays.asList("12345","NewContact","91234344","post@mail.kp");
-    private static final List<String> valuesBadCode = Arrays.asList("","NewContact","91234344","post@mail.kp");
-    private static final List<String> valuesBadName = Arrays.asList("12345","","91234344","post@mail.kp");
-    private static final List<String> valuesBadPhone = Arrays.asList("12345","NewContact","","post@mail.kp");
-    private static final List<String> valuesBadEmail = Arrays.asList("12345","NewContact","91234344","postmail.kp");
-
     @Test
     @DisplayName("1. Testing the create contact. Ok.")
     @Order(1)
     void createTestOk() {
-        String code = valuesGood.get(0);
-        String name = valuesGood.get(1);
-        String phone = valuesGood.get(2);
-        String email = valuesGood.get(3);
+        List<String> valuesGood = GoogleSheetValues.VALUES_GOOD.getValues();
 
-        Contact contact = Contact.create(code, name, phone, email);
+        Contact contact = Contact.create(valuesGood);
 
         assertAll(
                 () -> assertNotNull(contact),
-                () -> assertEquals(code, contact.getCode()),
-                () -> assertEquals(name, contact.getName()),
-                () -> assertEquals(phone, contact.getPhone()),
-                () -> assertEquals(email, contact.getEmail())
+                () -> assertEquals(valuesGood.get(0), contact.getCode()),
+                () -> assertEquals(valuesGood.get(1), contact.getName()),
+                () -> assertEquals(valuesGood.get(2), contact.getPhone()),
+                () -> assertEquals(valuesGood.get(3), contact.getEmail())
         );
 
         System.out.println("--- contact:" + contact);
@@ -49,14 +41,27 @@ public class ContactTests {
     @DisplayName("2. Testing the create contact. Bad email.")
     @Order(2)
     void createTestBadEmail() {
-        String code = valuesBadEmail.get(0);
-        String name = valuesBadEmail.get(1);
-        String phone = valuesBadEmail.get(2);
-        String email = valuesBadEmail.get(3);
+
+        List<String> valuesBadEmail = GoogleSheetValues.VALUES_BADEMAIL.getValues();
 
         IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-                () -> Contact.create(code, name, phone, email)
+                () -> Contact.create(valuesBadEmail)
         );
-        assertEquals("Проверьте наименование электронной почты: " + email, iae.getMessage());
+        assertEquals("Проверьте наименование электронной почты: " + valuesBadEmail.get(3), iae.getMessage());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = GoogleSheetValues.class, names = {
+            "VALUES_BADCODE",
+            "VALUES_BADNAME",
+            "VALUES_BADPHONE",
+            "VALUES_BADEMAIL"
+    })
+    @DisplayName("3. Testing the create contact. Bad values.")
+    @Order(3)
+    void createTestBadAll(GoogleSheetValues googleSheetValues) {
+        assertThrows(IllegalArgumentException.class,
+                () -> Contact.create(googleSheetValues.getValues())
+        );
     }
 }

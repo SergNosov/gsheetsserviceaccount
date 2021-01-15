@@ -27,7 +27,6 @@ public class Contact {
      * Contact.create(String code, String name, String phone, String email)
      * или Contact.create(List<String> values)
      */
-    @Deprecated
     protected Contact(ObjectId id, String code, String name, String phone, String email) {
         this.id = id;
         this.code = code;

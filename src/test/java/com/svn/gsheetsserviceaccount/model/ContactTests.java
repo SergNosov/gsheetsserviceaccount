@@ -85,4 +85,17 @@ public class ContactTests {
 
         assertEquals("Значение values не должно быть пустым.", iae.getMessage());
     }
+
+    @Test
+    @DisplayName("6. Testing the create contact. Incorrect list size.")
+    @Order(6)
+    void createTestIncorrectListSize(){
+        List<String> incorrectList = GoogleSheetValues.VALUES_INCORRECT_SIZE.getValues();
+
+        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
+                () -> Contact.create(incorrectList)
+        );
+
+        assertEquals("Нeвозможно создать контакт из передаваемого списка: "+incorrectList, iae.getMessage());
+    }
 }

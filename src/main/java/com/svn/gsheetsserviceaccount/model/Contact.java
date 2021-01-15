@@ -48,7 +48,7 @@ public class Contact {
         Assert.notNull(values, "Значение values не должно быть null.");
         Assert.notEmpty(values, "Значение values не должно быть пустым.");
         Assert.isTrue(values.size() > 3,
-                "Навозможно создать контакт из передаваемого списка:" + values);
+                "Нeвозможно создать контакт из передаваемого списка: " + values);
 
         Contact contact = Contact.create(
                 values.get(0),

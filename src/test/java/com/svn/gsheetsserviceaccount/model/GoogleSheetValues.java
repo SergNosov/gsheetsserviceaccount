@@ -8,7 +8,9 @@ public enum GoogleSheetValues {
     VALUES_BADCODE(Arrays.asList("", "NewContact", "91234344", "post@mail.kp")),
     VALUES_BADNAME(Arrays.asList("12345", "", "91234344", "post@mail.kp")),
     VALUES_BADPHONE(Arrays.asList("12345", "NewContact", "", "post@mail.kp")),
-    VALUES_BADEMAIL(Arrays.asList("12345", "NewContact", "91234344", "postmail.kp"));
+    VALUES_BADEMAIL(Arrays.asList("12345", "NewContact", "91234344", "postmail.kp")),
+    VALUES_INCORRECT_SIZE(Arrays.asList("12345", "NewContact", "91234344"))
+    ;
 
     private final List<String> values;
 

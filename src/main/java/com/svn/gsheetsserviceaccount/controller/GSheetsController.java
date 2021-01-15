@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 public class GSheetsController {
 
-    private final GoogleConnectionService connectionService;
     private final GoogleSheetsService sheetsService;
 
     @Autowired
@@ -29,14 +28,13 @@ public class GSheetsController {
     @Autowired
     public GSheetsController(GoogleConnectionService connectionService,
                              GoogleSheetsService sheetsService) {
-        this.connectionService = connectionService;
         this.sheetsService = sheetsService;
     }
 
     @GetMapping({"/", "/api/sheet"})
     public ResponseEntity<List<List<String>>> readGoogleSheet(HttpServletResponse response) throws IOException {
 
-        List<List<String>> responseBody = sheetsService.readTable(connectionService);
+        List<List<String>> responseBody = sheetsService.readTable();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }

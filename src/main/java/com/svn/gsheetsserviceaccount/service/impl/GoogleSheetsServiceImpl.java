@@ -21,6 +21,7 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
     private final String appName;
     private final String spreadsheetId;
     private final String sheetName;
+    private final GoogleConnectionService googleConnectionService;
     private Sheets sheets = null;
 
     public GoogleSheetsServiceImpl(@Value("${google.app.name}")
@@ -28,24 +29,26 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
                                    @Value("${google.spreadsheet.id}")
                                            String spreadsheetId,
                                    @Value("${google.spreadsheet.sheet.name}")
-                                   String sheetName) {
+                                           String sheetName,
+                                   GoogleConnectionService googleConnectionService) {
         this.appName = appName;
         this.spreadsheetId = spreadsheetId;
         this.sheetName = sheetName;
+        this.googleConnectionService = googleConnectionService;
     }
 
     @Override
-    public List<List<String>> readTable(GoogleConnectionService connection) throws IOException {
-        Sheets service = getSheetsService(connection);
+    public List<List<String>> readTable() throws IOException {
+        Sheets service = getSheetsService();
         return readSheets(service, spreadsheetId, sheetName);
     }
 
-    private Sheets getSheetsService(GoogleConnectionService gc) throws IOException {
+    private Sheets getSheetsService() throws IOException {
         if (this.sheets == null) {
             this.sheets = new Sheets.Builder(
                     Global.HTTP_TRANSPORT,
                     Global.JSON_FACTORY,
-                    gc.getCredentials())
+                    googleConnectionService.getCredentials())
                     .setApplicationName(appName).build();
         }
         return this.sheets;

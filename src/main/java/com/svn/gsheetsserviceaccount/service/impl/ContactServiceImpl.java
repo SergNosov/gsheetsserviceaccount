@@ -5,9 +5,11 @@ import com.svn.gsheetsserviceaccount.repositories.ContactRepository;
 import com.svn.gsheetsserviceaccount.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
 

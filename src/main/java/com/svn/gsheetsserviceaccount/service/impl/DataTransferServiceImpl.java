@@ -6,6 +6,8 @@ import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DataTransferServiceImpl implements DataTransferService {
@@ -15,6 +17,6 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     @Override
     public void transfer() {
-
+       // List<List<String>> googleTableValues = googleSheetsService.readTable()
     }
 }

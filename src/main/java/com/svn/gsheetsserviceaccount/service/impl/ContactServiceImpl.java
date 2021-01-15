@@ -21,4 +21,11 @@ public class ContactServiceImpl implements ContactService {
 
         return contactRepository.save(contact);
     }
+
+    @Override
+    public boolean existsByCode(String code){
+        Assert.hasText(code, "Значение code не должно быть пустым.");
+
+        return contactRepository.existsContactByCode(code);
+    }
 }

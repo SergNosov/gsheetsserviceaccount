@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,9 +54,11 @@ public class ContactServiceImplTests {
     @Order(1)
     void testSaveContactOk() {
         given(contactRepository.save(any(Contact.class))).willReturn(contact);
-        Contact savedContact = contactService.save(contact);
+        Optional<Contact> savedContact = contactService.save(contact);
 
         assertNotNull(savedContact);
+        assertNotNull(savedContact.get());
+        assertEquals(contact.getCode(),savedContact.get().getCode());
     }
 
     @Test

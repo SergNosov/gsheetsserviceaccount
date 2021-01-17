@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,12 +19,15 @@ public class ContactServiceImpl implements ContactService {
     private final ContactRepository contactRepository;
 
     @Override
-    public Contact save(final Contact contact) {
+    public Optional<Contact> save(final Contact contact) {
         Assert.notNull(contact,"Сведения о контакте на должны быть null");
 
-        contactRepository.save(contact);
+        Optional<Contact> optionalContact = Optional.empty();
+        if (!existsByCode(contact.getCode())){
+            optionalContact = Optional.of(contactRepository.save(contact));
+        }
 
-        return contactRepository.save(contact);
+        return optionalContact;
     }
 
     @Override

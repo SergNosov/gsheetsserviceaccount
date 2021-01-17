@@ -54,7 +54,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
 
     private void saveAllContacts(List<Contact> contacts){
-        if (contacts.size()>0) {
+        if (contacts.size()>0) {//todo перейти к индивидуальному сохранению contact и при успехе генерировать pdf
             List<Contact> savedList = contactService.saveAll(contacts);
             log.info("--- Количество сохраненных контактов: "+ savedList.size());
         } else {

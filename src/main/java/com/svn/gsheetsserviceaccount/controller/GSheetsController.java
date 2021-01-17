@@ -2,10 +2,10 @@ package com.svn.gsheetsserviceaccount.controller;
 
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.repositories.ContactRepository;
+import com.svn.gsheetsserviceaccount.service.DataTransferService;
 import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +26,9 @@ public class GSheetsController {
     private ContactRepository contactRepository;
 
     @Autowired
+    private DataTransferService dataTransferService;
+
+    @Autowired
     public GSheetsController(GoogleConnectionService connectionService,
                              GoogleSheetsService sheetsService) {
         this.sheetsService = sheetsService;
@@ -36,7 +39,10 @@ public class GSheetsController {
 
         List<List<String>> responseBody = sheetsService.readTable();
 
+        dataTransferService.transfer();
+
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        //return null;
     }
 
     @GetMapping("/add")

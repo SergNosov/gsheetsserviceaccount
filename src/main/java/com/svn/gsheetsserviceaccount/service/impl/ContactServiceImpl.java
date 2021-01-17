@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,5 +31,13 @@ public class ContactServiceImpl implements ContactService {
         Assert.hasText(code, "Значение code не должно быть пустым.");
 
         return contactRepository.existsContactByCode(code);
+    }
+
+    @Override
+    public List<Contact> saveAll(List<Contact> contacts){//todo проверить как сохраняются данные
+        Assert.notEmpty(contacts,"--- Список контактов должен содержать елементы. contacts: "+contacts);
+        Assert.noNullElements(contacts,"--- В списке контактов не должно быть null елемантов: "+ contacts);
+
+        return contactRepository.saveAll(contacts);
     }
 }

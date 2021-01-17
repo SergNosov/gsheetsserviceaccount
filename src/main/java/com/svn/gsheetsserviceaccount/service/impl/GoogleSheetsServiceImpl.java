@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.svn.gsheetsserviceaccount.Global;
 import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+@Slf4j
 @Service
 public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
@@ -38,29 +40,39 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
     }
 
     @Override
-    public List<List<String>> readTable() throws IOException {
+    public List<List<String>> readTable()  {
         Sheets service = getSheetsService();
         return readSheets(service, spreadsheetId, sheetName);
     }
 
-    private Sheets getSheetsService() throws IOException {
+    private Sheets getSheetsService() {
         if (this.sheets == null) {
-            this.sheets = new Sheets.Builder(
-                    Global.HTTP_TRANSPORT,
-                    Global.JSON_FACTORY,
-                    googleConnectionService.getCredentials())
-                    .setApplicationName(appName).build();
+            try {
+                this.sheets = new Sheets.Builder(
+                        Global.HTTP_TRANSPORT,
+                        Global.JSON_FACTORY,
+                        googleConnectionService.getCredentials())
+                        .setApplicationName(appName).build();
+            } catch (IOException ioe){
+                log.error("--- Ошибка получения учетных данных (Credential): "+ioe.getMessage());
+                throw new RuntimeException("--- Ошибка получения учетных данных (Credential).",ioe);
+            }
         }
         return this.sheets;
     }
 
-    private List<List<String>> readSheets(Sheets service, String spreadsheetId, String sheetName) throws IOException {
-        ValueRange table = service.spreadsheets().values().get(spreadsheetId, sheetName).execute();
+    private List<List<String>> readSheets(Sheets service, String spreadsheetId, String sheetName){
+        try {
+            ValueRange table = service.spreadsheets().values().get(spreadsheetId, sheetName).execute();
 
-        List<List<String>> stringValues = valuesToString(table.getValues());
-        printTable(stringValues);
+            List<List<String>> stringValues = valuesToString(table.getValues());
+            printTable(stringValues);
 
-        return stringValues;
+            return stringValues;
+        } catch (IOException ioe) {
+            log.error("--- Не удалось получить данные из сточника данных. Ошибка: "+ioe.getMessage());
+            throw  new RuntimeException("--- Не удалось получить данные из сточника данных.",ioe);
+        }
     }
 
     private List<List<String>> valuesToString(List<List<Object>> objectValues){

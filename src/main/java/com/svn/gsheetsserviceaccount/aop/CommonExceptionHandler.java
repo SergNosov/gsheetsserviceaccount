@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class CommonExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAllException(Exception ex, Model model) {
+    public ResponseEntity<String> handleAllException(Exception ex) {
         log.info("--- handleAllException:");
         logginException(ex);
 

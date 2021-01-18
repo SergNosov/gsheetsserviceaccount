@@ -1,10 +1,13 @@
 package com.svn.gsheetsserviceaccount.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.repositories.ContactRepository;
+import com.svn.gsheetsserviceaccount.service.ContactService;
 import com.svn.gsheetsserviceaccount.service.DataTransferService;
 import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
+import com.svn.gsheetsserviceaccount.service.PdfService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,10 +27,13 @@ public class GSheetsController {
     private final GoogleSheetsService sheetsService;
 
     @Autowired
-    private ContactRepository contactRepository;
+    private ContactService contactService;
 
     @Autowired
     private DataTransferService dataTransferService;
+
+    @Autowired
+    private PdfService pdfService;
 
     @Autowired
     public GSheetsController(GoogleConnectionService connectionService,
@@ -46,10 +53,10 @@ public class GSheetsController {
     }
 
     @GetMapping("/add")
-    public Contact addContact() {
+    public Contact addContact() throws FileNotFoundException, DocumentException {
 
         Contact contact = Contact.create(
-                "12345678",
+                "88411",
                 "Новый контакт",
                 "+79146895789",
                 "newContact@mail.ru"
@@ -58,9 +65,9 @@ public class GSheetsController {
         log.info("--- contact: " + System.identityHashCode(contact));
         log.info("--- contact: " + contact);
 
-        Contact insertedContact = contactRepository.insert(contact);
-        //insertedContact = contactRepository.save(contact);
+        Contact insertedContact = contactService.save(contact).orElseThrow();
 
+        pdfService.generatePdf(insertedContact);
 
         log.info("--- insertedContact: " + System.identityHashCode(insertedContact));
         log.info("--- insertedContact: " + insertedContact);

@@ -53,10 +53,10 @@ public class GSheetsController {
     }
 
     @GetMapping("/add")
-    public Contact addContact() throws FileNotFoundException, DocumentException {
+    public Contact addContact() {
 
         Contact contact = Contact.create(
-                "88411",
+                "8841687",
                 "Новый контакт",
                 "+79146895789",
                 "newContact@mail.ru"

@@ -1,10 +1,13 @@
 package com.svn.gsheetsserviceaccount.service.impl;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.svn.gsheetsserviceaccount.model.Contact;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.FastByteArrayOutputStream;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -30,6 +34,8 @@ public class PdfServiceImpl implements PdfService {
             final Document document = new Document();
 
             PdfWriter.getInstance(document, byteOutputStream);
+            //PdfWriter.getInstance(document, new FileOutputStream("d:/temp/contact.pdf"));
+
             final BaseFont baseFont = BaseFont.createFont("Fonts\\times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(baseFont, 16, Font.NORMAL, BaseColor.BLACK);
 
@@ -39,13 +45,22 @@ public class PdfServiceImpl implements PdfService {
             document.add(new Paragraph("name: " + contact.getName(), font));
             document.add(new Paragraph("phone: " + contact.getPhone(), font));
             document.add(new Paragraph("e-mail: " + contact.getEmail(), font));
+            document.add(generateQRCode(contact));
             document.close();
 
             log.info("--- contact:" + contact + "; byteArray.size():" + byteOutputStream.size());
 
             return byteOutputStream;
         } catch (IOException | DocumentException ex) {
-            throw new RuntimeException("--- Не удалось создать pdf документ для: "+contact,ex);
+            log.error("--- Не удалось создать pdf документ для: "+contact+"; exception: "+ ex.getMessage());
+
+            throw new RuntimeException("--- Не удалось создать pdf документ для: "+ contact +
+                    "; " + ex.getMessage(), ex);
         }
+    }
+
+    private Image generateQRCode(Contact contact) throws BadElementException {
+        BarcodeQRCode barcodeQRCode = new BarcodeQRCode(contact.getCode(), 250, 250, null);
+        return barcodeQRCode.getImage();
     }
 }

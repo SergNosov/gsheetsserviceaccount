@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import java.util.List;
 
 @Data
-@Setter(AccessLevel.NONE)
 @Document
 public class Contact {
 

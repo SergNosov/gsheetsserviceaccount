@@ -14,8 +14,8 @@ public class UserCard {
 
     @Id
     private final ObjectId id = ObjectId.get();
-    private Contact contact;
-    private Binary pdfCard;
+    private final Contact contact;
+    private final Binary pdfCard;
     private boolean sended;
     private LocalDateTime dateOfSending;
 }

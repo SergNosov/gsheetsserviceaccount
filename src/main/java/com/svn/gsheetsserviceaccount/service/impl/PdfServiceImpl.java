@@ -17,16 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.FastByteArrayOutputStream;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 @Slf4j
 @Service
 public class PdfServiceImpl implements PdfService {
 
     @Override
-    public OutputStream generatePdf(final Contact contact) {
+    public byte[] generatePdf(final Contact contact) {
         Assert.notNull(contact, "--- Сведения о контакте не должны быть null.");
 
         try {
@@ -50,7 +48,7 @@ public class PdfServiceImpl implements PdfService {
 
             log.info("--- contact:" + contact + "; byteArray.size():" + byteOutputStream.size());
 
-            return byteOutputStream;
+            return byteOutputStream.toByteArray();
         } catch (IOException | DocumentException ex) {
             log.error("--- Не удалось создать pdf документ для: "+contact+"; exception: "+ ex.getMessage());
 

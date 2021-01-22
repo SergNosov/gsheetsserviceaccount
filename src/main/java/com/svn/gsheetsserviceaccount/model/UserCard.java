@@ -4,6 +4,7 @@ import lombok.Data;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class UserCard {
 
     @Id
     private final ObjectId id = ObjectId.get();
+    @DBRef
     private final Contact contact;
     private final Binary pdfCard;
     private boolean sended;

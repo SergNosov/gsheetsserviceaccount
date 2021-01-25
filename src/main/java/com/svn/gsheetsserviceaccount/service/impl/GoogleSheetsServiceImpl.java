@@ -70,8 +70,8 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
             return stringValues;
         } catch (IOException ioe) {
-            log.error("--- Не удалось получить данные из сточника данных. Ошибка: "+ioe.getMessage());
-            throw  new RuntimeException("--- Не удалось получить данные из сточника данных.",ioe);
+            log.error("--- Не удалось получить данные из источника данных. Ошибка: "+ioe.getMessage());
+            throw  new RuntimeException("--- Не удалось получить данные из источника данных.",ioe);
         }
     }
 

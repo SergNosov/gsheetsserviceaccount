@@ -39,8 +39,7 @@ public class GSheetsController {
     private UserCardRepository userCardRepository;
 
     @Autowired
-    public GSheetsController(GoogleConnectionService connectionService,
-                             GoogleSheetsService sheetsService) {
+    public GSheetsController(GoogleSheetsService sheetsService) {
         this.sheetsService = sheetsService;
     }
 

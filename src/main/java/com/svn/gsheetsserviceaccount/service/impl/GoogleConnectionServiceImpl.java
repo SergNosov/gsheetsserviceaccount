@@ -25,7 +25,6 @@ import java.util.Collections;
 public class GoogleConnectionServiceImpl implements GoogleConnectionService {
 
     private final Resource resource;
-    private final String secret;
     private GoogleCredential googleCredentials;
 
     @Autowired
@@ -33,7 +32,6 @@ public class GoogleConnectionServiceImpl implements GoogleConnectionService {
                                                ResourceLoader resourceLoader,
                                        @Value("${google.secret-file}")
                                                String secret) {
-        this.secret = secret;
         this.resource = resourceLoader.getResource("classpath:" + secret);
     }
 
@@ -53,7 +51,8 @@ public class GoogleConnectionServiceImpl implements GoogleConnectionService {
                 throw new RuntimeException("---Не удалось получить учетные данные: " + ioe.getMessage(), ioe);
             }
 
-            log.info("--- GoogleConnectionServiceImpl postConstruct init credentials success.");
+            log.info("--- GoogleConnectionServiceImpl postConstruct init credentials success. " +
+                    System.identityHashCode(this));
         }
     }
 

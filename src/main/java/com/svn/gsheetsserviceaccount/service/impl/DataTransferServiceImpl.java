@@ -53,7 +53,7 @@ public class DataTransferServiceImpl implements DataTransferService {
                     contacts.add(contact);
                 }
             } catch (IllegalArgumentException iae) {
-                log.info("--- не создан контакт: " + recordValues + "; " + iae.getMessage());
+                log.warn("--- не создан контакт: " + recordValues + "; " + iae.getMessage());
             }
         }
         printContacts(contacts);
@@ -64,7 +64,7 @@ public class DataTransferServiceImpl implements DataTransferService {
         if (contacts.size()>0) {
             contacts.stream().forEach(c->log.info("--- contact: "+c));
         } else {
-            log.info("--- Список контактов пуст.");
+            log.warn("--- Список контактов пуст.");
         }
     }
 
@@ -73,7 +73,7 @@ public class DataTransferServiceImpl implements DataTransferService {
             List<Contact> savedList = contactService.saveAll(contacts);
             log.info("--- Количество сохраненных контактов: "+ savedList.size());
         } else {
-            log.info("--- Список контактов пуст.");
+            log.warn("--- Список контактов пуст.");
         }
     }
 }

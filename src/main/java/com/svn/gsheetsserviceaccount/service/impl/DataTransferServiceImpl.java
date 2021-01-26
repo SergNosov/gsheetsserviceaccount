@@ -3,26 +3,41 @@ package com.svn.gsheetsserviceaccount.service.impl;
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.service.ContactService;
 import com.svn.gsheetsserviceaccount.service.DataTransferService;
+import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DataTransferServiceImpl implements DataTransferService {
 
     private final GoogleSheetsService googleSheetsService;
     private final ContactService contactService;
+    private final GoogleConnectionService connectionService;
+
+    public DataTransferServiceImpl(GoogleSheetsService googleSheetsService,
+                                   ContactService contactService,
+                                   GoogleConnectionService connectionService) {
+        this.googleSheetsService = googleSheetsService;
+        this.contactService = contactService;
+        this.connectionService = connectionService;
+
+        log.info("--- Thread: "+Thread.currentThread().getName());
+        log.info("--- Id: "+System.identityHashCode(this));
+    }
 
     @Override
     public void transfer() {
 
-        final List<List<String>> googleTableValues = googleSheetsService.readTable();
+        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
         final List<Contact> contacts = createContactList(googleTableValues);
 
         saveAllContacts(contacts);

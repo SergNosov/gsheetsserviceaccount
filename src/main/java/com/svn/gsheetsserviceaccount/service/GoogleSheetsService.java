@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface GoogleSheetsService {
 
-    List<List<String>> readTable();
+    List<List<String>> readTable(GoogleConnectionService connectionService);
 }

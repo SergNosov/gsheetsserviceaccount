@@ -1,9 +1,7 @@
 package com.svn.gsheetsserviceaccount.controller;
 
-import com.itextpdf.text.DocumentException;
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.model.UserCard;
-import com.svn.gsheetsserviceaccount.repositories.ContactRepository;
 import com.svn.gsheetsserviceaccount.repositories.UserCardRepository;
 import com.svn.gsheetsserviceaccount.service.ContactService;
 import com.svn.gsheetsserviceaccount.service.DataTransferService;
@@ -15,16 +13,11 @@ import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 @Slf4j
@@ -54,11 +47,12 @@ public class GSheetsController {
     @GetMapping({"/", "/api/sheet"})
     public ResponseEntity<List<List<String>>> readGoogleSheet(HttpServletResponse response) throws IOException {
 
-        List<List<String>> responseBody = sheetsService.readTable();
+        //List<List<String>> responseBody = sheetsService.readTable();
 
         dataTransferService.transfer();
 
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        //return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return new ResponseEntity<>(null,HttpStatus.OK);
     }
 
     @GetMapping("/add")

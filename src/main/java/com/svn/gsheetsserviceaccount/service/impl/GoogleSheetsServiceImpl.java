@@ -8,6 +8,7 @@ import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,12 +19,12 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 @Slf4j
 @Service
+@Scope("prototype")
 public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
     private final String appName;
     private final String spreadsheetId;
     private final String sheetName;
-    private final GoogleConnectionService googleConnectionService;
     private Sheets sheets = null;
 
     public GoogleSheetsServiceImpl(@Value("${google.app.name}")
@@ -31,32 +32,25 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
                                    @Value("${google.spreadsheet.id}")
                                            String spreadsheetId,
                                    @Value("${google.spreadsheet.sheet.name}")
-                                           String sheetName,
-                                   GoogleConnectionService googleConnectionService) {
+                                           String sheetName) {
         this.appName = appName;
         this.spreadsheetId = spreadsheetId;
         this.sheetName = sheetName;
-        this.googleConnectionService = googleConnectionService;
     }
 
     @Override
-    public List<List<String>> readTable()  {
-        Sheets service = getSheetsService();
+    public List<List<String>> readTable(GoogleConnectionService connectionService)  {
+        Sheets service = getSheetsService(connectionService);
         return readSheets(service, spreadsheetId, sheetName);
     }
 
-    private Sheets getSheetsService() {
+    private Sheets getSheetsService(GoogleConnectionService connectionService) {
         if (this.sheets == null) {
-            try {
-                this.sheets = new Sheets.Builder(
-                        Global.HTTP_TRANSPORT,
-                        Global.JSON_FACTORY,
-                        googleConnectionService.getCredentials())
-                        .setApplicationName(appName).build();
-            } catch (IOException ioe){
-                log.error("--- Ошибка получения учетных данных (Credential): "+ioe.getMessage());
-                throw new RuntimeException("--- Ошибка получения учетных данных (Credential).",ioe);
-            }
+            this.sheets = new Sheets.Builder(
+                    Global.HTTP_TRANSPORT,
+                    Global.JSON_FACTORY,
+                    connectionService.getCredentials())
+                    .setApplicationName(appName).build();
         }
         return this.sheets;
     }

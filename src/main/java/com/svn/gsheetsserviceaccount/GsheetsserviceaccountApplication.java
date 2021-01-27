@@ -3,8 +3,9 @@ package com.svn.gsheetsserviceaccount;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
 public class GsheetsserviceaccountApplication {
 
@@ -12,5 +13,4 @@ public class GsheetsserviceaccountApplication {
         ConfigurableApplicationContext context = SpringApplication.run(GsheetsserviceaccountApplication.class, args);
         System.out.println("--- run.");
     }
-
 }

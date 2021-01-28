@@ -29,24 +29,21 @@ public class DataTransferServiceImpl implements DataTransferService {
         this.googleSheetsService = googleSheetsService;
         this.contactService = contactService;
         this.connectionService = connectionService;
-
-        //log.info("--- Thread: "+Thread.currentThread().getName());
-       // log.info("--- DataTransferServiceImpl.Id: "+System.identityHashCode(this));
     }
 
     @Override
     public void transfer() {
 
-        log.info("--- Thread: "+Thread.currentThread().getName());
-        log.info("--- DataTransferServiceImpl.Id: "+System.identityHashCode(this));
+        log.info("--- Thread: " + Thread.currentThread().getName());
+        log.info("--- DataTransferServiceImpl.Id: " + System.identityHashCode(this));
 
-//        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
-//        final List<Contact> contacts = createContactList(googleTableValues);
-//
-//        saveAllContacts(contacts);
+        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
+        final List<Contact> contacts = createContactList(googleTableValues);
+
+        saveAllContacts(contacts);
     }
 
-    private List<Contact> createContactList(List<List<String>> values){
+    private List<Contact> createContactList(List<List<String>> values) {
         List<Contact> contacts = new ArrayList<>();
 
         for (List<String> recordValues : values) {
@@ -63,18 +60,18 @@ public class DataTransferServiceImpl implements DataTransferService {
         return List.copyOf(contacts);
     }
 
-    private void printContacts(List<Contact> contacts){
-        if (contacts.size()>0) {
-            contacts.stream().forEach(c->log.info("--- contact: "+c));
+    private void printContacts(List<Contact> contacts) {
+        if (contacts.size() > 0) {
+            contacts.stream().forEach(c -> log.info("--- contact: " + c));
         } else {
             log.warn("--- Список контактов пуст.");
         }
     }
 
-    private void saveAllContacts(List<Contact> contacts){
-        if (contacts.size()>0) {//todo перейти к индивидуальному сохранению contact и при успехе генерировать pdf
+    private void saveAllContacts(List<Contact> contacts) {
+        if (contacts.size() > 0) {//todo перейти к индивидуальному сохранению contact и при успехе генерировать pdf
             List<Contact> savedList = contactService.saveAll(contacts);
-            log.info("--- Количество сохраненных контактов: "+ savedList.size());
+            log.info("--- Количество сохраненных контактов: " + savedList.size());
         } else {
             log.warn("--- Список контактов пуст.");
         }

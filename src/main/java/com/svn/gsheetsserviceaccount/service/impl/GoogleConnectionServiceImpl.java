@@ -30,7 +30,7 @@ public class GoogleConnectionServiceImpl implements GoogleConnectionService {
     @Autowired
     public GoogleConnectionServiceImpl(@Qualifier("webApplicationContext")
                                                ResourceLoader resourceLoader,
-                                       @Value("${google.secret-file}")
+                                       @Value("${google.file}")
                                                String secret) {
         this.resource = resourceLoader.getResource("classpath:" + secret);
     }

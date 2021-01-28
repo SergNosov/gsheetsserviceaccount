@@ -75,6 +75,6 @@ public class GSheetsRequestScopeAttr implements RequestAttributes {
 
     private Object errorMessage(String message) {
         log.error(message);
-        throw new RuntimeException(message);
+        throw new IllegalArgumentException(message);
     }
 }

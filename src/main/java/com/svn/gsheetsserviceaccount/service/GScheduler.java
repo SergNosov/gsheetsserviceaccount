@@ -1,6 +1,6 @@
 package com.svn.gsheetsserviceaccount.service;
 
-import com.svn.gsheetsserviceaccount.config.CustomRequestScopeAttr;
+import com.svn.gsheetsserviceaccount.config.GSheetsRequestScopeAttr;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +18,7 @@ public class GScheduler {
     public void transferData(){
       //log.info("--- Transferind data from google sheets.");
         try {
-            RequestContextHolder.setRequestAttributes(new CustomRequestScopeAttr());
+            RequestContextHolder.setRequestAttributes(new GSheetsRequestScopeAttr());
             dataTransferService.transfer();
         } catch (Exception ex) {
             System.out.println(ex.getStackTrace().toString());

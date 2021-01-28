@@ -30,17 +30,20 @@ public class DataTransferServiceImpl implements DataTransferService {
         this.contactService = contactService;
         this.connectionService = connectionService;
 
-        log.info("--- Thread: "+Thread.currentThread().getName());
-        log.info("--- Id: "+System.identityHashCode(this));
+        //log.info("--- Thread: "+Thread.currentThread().getName());
+       // log.info("--- DataTransferServiceImpl.Id: "+System.identityHashCode(this));
     }
 
     @Override
     public void transfer() {
 
-        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
-        final List<Contact> contacts = createContactList(googleTableValues);
+        log.info("--- Thread: "+Thread.currentThread().getName());
+        log.info("--- DataTransferServiceImpl.Id: "+System.identityHashCode(this));
 
-        saveAllContacts(contacts);
+//        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
+//        final List<Contact> contacts = createContactList(googleTableValues);
+//
+//        saveAllContacts(contacts);
     }
 
     private List<Contact> createContactList(List<List<String>> values){

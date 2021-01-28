@@ -28,6 +28,6 @@ public class GSchedulerImpl implements GScheduler {
         } finally {
             RequestContextHolder.resetRequestAttributes();
         }
-        log.info("--- GSchedulerImpl. Start transferData().");
+        log.info("--- GSchedulerImpl. End transferData().");
     }
 }

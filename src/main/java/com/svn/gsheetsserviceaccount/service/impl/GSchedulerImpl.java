@@ -5,7 +5,6 @@ import com.svn.gsheetsserviceaccount.service.DataTransferService;
 import com.svn.gsheetsserviceaccount.service.GScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,15 +17,17 @@ public class GSchedulerImpl implements GScheduler {
 
     @Scheduled(fixedDelay = 20000)
     @Override
-    public void transferData(){
-      //log.info("--- Transferind data from google sheets.");
+    public void transferData() {
+        log.info("--- GSchedulerImpl. Start transferData()."); // todo через аспект?
         try {
             RequestContextHolder.setRequestAttributes(new GSheetsRequestScopeAttr());
             dataTransferService.transfer();
         } catch (Exception ex) {
-            System.out.println(ex.getStackTrace().toString());
+            log.error("--- exception in GSchedulerImpl.transferData(): " + ex.getMessage());
+            throw new RuntimeException("--- exception in GSchedulerImpl.transferData().", ex);
         } finally {
             RequestContextHolder.resetRequestAttributes();
         }
+        log.info("--- GSchedulerImpl. Start transferData().");
     }
 }

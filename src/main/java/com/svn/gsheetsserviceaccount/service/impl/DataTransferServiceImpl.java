@@ -16,12 +16,12 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DataTransferServiceImpl implements DataTransferService {
 
+    private final GoogleConnectionService connectionService;
     private final GoogleSheetsService googleSheetsService;
     private final ContactService contactService;
-    private final GoogleConnectionService connectionService;
 
     public DataTransferServiceImpl(GoogleSheetsService googleSheetsService,
                                    ContactService contactService,
@@ -37,7 +37,7 @@ public class DataTransferServiceImpl implements DataTransferService {
         log.info("--- Thread: " + Thread.currentThread().getName());
         log.info("--- DataTransferServiceImpl.Id: " + System.identityHashCode(this));
 
-        final List<List<String>> googleTableValues = googleSheetsService.readTable(connectionService);
+        final List<List<String>> googleTableValues = googleSheetsService.readTable();
         final List<Contact> contacts = createContactList(googleTableValues);
 
         saveAllContacts(contacts);

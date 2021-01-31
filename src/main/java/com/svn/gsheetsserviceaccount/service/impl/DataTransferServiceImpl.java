@@ -3,34 +3,28 @@ package com.svn.gsheetsserviceaccount.service.impl;
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.service.ContactService;
 import com.svn.gsheetsserviceaccount.service.DataTransferService;
-import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
-//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DataTransferServiceImpl implements DataTransferService {
 
-    private final GoogleConnectionService connectionService;
     private final GoogleSheetsService googleSheetsService;
     private final ContactService contactService;
 
     public DataTransferServiceImpl(GoogleSheetsService googleSheetsService,
-                                   ContactService contactService,
-                                   GoogleConnectionService connectionService) {
+                                   ContactService contactService) {
         this.googleSheetsService = googleSheetsService;
         this.contactService = contactService;
-        this.connectionService = connectionService;
     }
 
+    @Scheduled(fixedDelay = 20000)
     @Override
     public void transfer() {
 

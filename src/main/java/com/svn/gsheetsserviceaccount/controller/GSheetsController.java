@@ -5,7 +5,6 @@ import com.svn.gsheetsserviceaccount.model.UserCard;
 import com.svn.gsheetsserviceaccount.repositories.UserCardRepository;
 import com.svn.gsheetsserviceaccount.service.ContactService;
 import com.svn.gsheetsserviceaccount.service.DataTransferService;
-import com.svn.gsheetsserviceaccount.service.GoogleConnectionService;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import com.svn.gsheetsserviceaccount.service.PdfService;
 import lombok.extern.slf4j.Slf4j;

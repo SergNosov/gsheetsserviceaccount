@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.svn.gsheetsserviceaccount.service.GoogleSheetsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
             List<List<String>> stringValues = valuesToString(table.getValues());
             printTable(stringValues);
 
-            return stringValues;
+            return List.copyOf(stringValues);
         } catch (IOException ioe) {
             log.error("--- Не удалось получить данные из источника данных. Ошибка: " + ioe.getMessage());
             throw new RuntimeException("--- Не удалось получить данные из источника данных.", ioe);
@@ -59,10 +58,9 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
     private void printTable(List<List<String>> stringValues) {
         if (stringValues == null || stringValues.size() == 0) {
-            System.err.println("No data found.");
+            log.warn("--- No data found.");
         } else {
-            System.out.println("Data from google sheets:");
-            stringValues.stream().forEach(System.out::println);
+            stringValues.stream().forEach((s)->log.info("--- string from google sheets: "+s));
         }
     }
 }

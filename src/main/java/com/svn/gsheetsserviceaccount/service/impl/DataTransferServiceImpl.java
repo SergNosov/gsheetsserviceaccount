@@ -28,9 +28,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     @Override
     public void transfer() {
 
-        log.info("--- Thread: " + Thread.currentThread().getName());
-        log.info("--- DataTransferServiceImpl.Id: " + System.identityHashCode(this));
-
         final List<List<String>> googleTableValues = googleSheetsService.readTable();
         final List<Contact> contacts = createContactList(googleTableValues);
 

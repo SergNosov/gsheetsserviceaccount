@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Document
-public class Contact {
+public final class Contact {
 
     @Id
     private final ObjectId id;
@@ -24,7 +24,7 @@ public class Contact {
      * Contact.create(String code, String name, String phone, String email)
      * или Contact.create(List<String> values)
      */
-    protected Contact(ObjectId id, String code, String name, String phone, String email) {
+    private Contact(ObjectId id, String code, String name, String phone, String email) {
         this.id = id;
         this.code = code;
         this.name = name;

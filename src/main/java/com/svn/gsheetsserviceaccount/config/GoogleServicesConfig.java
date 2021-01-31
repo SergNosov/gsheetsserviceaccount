@@ -23,7 +23,7 @@ public class GoogleServicesConfig {
     private final Resource resource;
     private final String appName;
 
-    protected GoogleServicesConfig(@Qualifier("webApplicationContext")
+    public GoogleServicesConfig(@Qualifier("webApplicationContext")
                                            ResourceLoader resourceLoader,
                                    @Value("${google.file}")
                                            String secret,
@@ -34,7 +34,7 @@ public class GoogleServicesConfig {
     }
 
     @Bean
-    protected GoogleCredential googleCredentials() {
+    public GoogleCredential googleCredentials() {
         try {
             return GoogleCredential.fromStream(
                     new FileInputStream(resource.getFile()),
@@ -48,7 +48,7 @@ public class GoogleServicesConfig {
     }
 
     @Bean
-    protected Sheets googleSheets(GoogleCredential googleCredentials) {
+    public Sheets googleSheets(GoogleCredential googleCredentials) {
         return new Sheets.Builder(
                 Global.HTTP_TRANSPORT,
                 Global.JSON_FACTORY,

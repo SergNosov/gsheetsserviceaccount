@@ -25,7 +25,7 @@ public class ContactServiceImpl implements ContactService {
         Optional<Contact> optionalContact = Optional.empty();
         if (!existsByCode(contact.getCode())){
             optionalContact = Optional.of(contactRepository.save(contact));
-        }
+        } // todo а что делать если он есть?
 
         return optionalContact;
     }

@@ -10,14 +10,8 @@ import com.svn.gsheetsserviceaccount.service.PdfService;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -37,24 +31,18 @@ public class GSheetsController {
     @Autowired
     private UserCardRepository userCardRepository;
 
-    @Autowired
     public GSheetsController(GoogleSheetsService sheetsService) {
         this.sheetsService = sheetsService;
     }
 
-    @GetMapping({"/", "/api/sheet"})
-    public ResponseEntity<List<List<String>>> readGoogleSheet(HttpServletResponse response) throws IOException {
-
-        //List<List<String>> responseBody = sheetsService.readTable();
-
+    @GetMapping({"/"})
+    public String readGoogleSheet() {
         dataTransferService.transfer();
-
-        //return new ResponseEntity<>(responseBody, HttpStatus.OK);
-        return new ResponseEntity<>(null,HttpStatus.OK);
+        return "dataTransferService complete";
     }
 
     @GetMapping("/add")
-    public UserCard addContact() throws IOException {
+    public UserCard addContact() {
 
         Contact contact = Contact.create(
                 "42",
@@ -67,7 +55,7 @@ public class GSheetsController {
         log.info("--- contact: " + contact);
 
         Contact insertedContact = contactService.save(contact)
-                .orElseThrow(() -> new IllegalArgumentException("--- В базе данные есть контакт с code:" + contact.getCode()));
+                .orElseThrow(() -> new IllegalArgumentException("--- В базе данных есть контакт с code:" + contact.getCode()));
 
         byte[] pdfByte = pdfService.generatePdf(insertedContact);
 

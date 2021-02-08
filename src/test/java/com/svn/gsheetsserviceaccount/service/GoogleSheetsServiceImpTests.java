@@ -87,8 +87,8 @@ public class GoogleSheetsServiceImpTests {
         }
 
         @Test
-        @DisplayName("2. Testing table reading. Ok.")
-        @Order(2)
+        @DisplayName("3. Testing table reading. Ok.")
+        @Order(3)
         void readTableTestOk() throws IOException {
 
             given(get.execute()).willReturn(testValueRange);

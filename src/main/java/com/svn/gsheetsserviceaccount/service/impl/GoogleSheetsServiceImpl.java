@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.springframework.util.Assert;
 
 @Slf4j
 @Service
@@ -34,8 +35,16 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
     @Override
     public List<List<String>> readTable() {
+
+        Assert.notNull(this.spreadsheetId,"Не верно указаны параметры Google Sheets(spreadsheetId).");
+        Assert.notNull(this.sheetName,"Не верно указаны параметры Google Sheets(sheetName).");
+
         try {
-            ValueRange table = sheets.spreadsheets().values().get(spreadsheetId, sheetName).execute();
+            ValueRange table = sheets
+                    .spreadsheets()
+                    .values()
+                    .get(spreadsheetId, sheetName)
+                    .execute();
 
             List<List<String>> stringValues = valuesToString(table.getValues());
             printTable(stringValues);
@@ -45,6 +54,7 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
             log.error("--- Не удалось получить данные из источника данных. Ошибка: " + ioe.getMessage());
             throw new RuntimeException("--- Не удалось получить данные из источника данных.", ioe);
         }
+
     }
 
     private List<List<String>> valuesToString(List<List<Object>> objectValues) {

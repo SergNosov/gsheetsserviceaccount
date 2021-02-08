@@ -105,6 +105,4 @@ public class ContactServiceImplTests {
         then(contactRepository).should(times(0))
                 .existsContactByCode((any(String.class)));
     }
-
-
 }

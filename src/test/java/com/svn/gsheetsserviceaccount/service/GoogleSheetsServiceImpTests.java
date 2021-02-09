@@ -101,5 +101,19 @@ public class GoogleSheetsServiceImpTests {
                     () -> assertEquals(testValueRange.getValues().size(), result.size())
             );
         }
+
+        @Test
+        @DisplayName("4. Testing table. Throw IOException.")
+        @Order(4)
+        void readTableTestIOException() throws IOException {
+
+                given(values.get(anyString(), anyString())).willThrow(new IOException("test ioe exception"));
+
+                RuntimeException rte = assertThrows(RuntimeException.class,
+                        () -> googleSheetsService.readTable()
+                );
+
+                assertEquals("--- Не удалось получить данные из источника данных.",rte.getMessage());
+        }
     }
 }

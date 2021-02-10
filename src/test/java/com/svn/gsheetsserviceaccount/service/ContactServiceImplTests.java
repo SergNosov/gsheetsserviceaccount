@@ -1,5 +1,6 @@
 package com.svn.gsheetsserviceaccount.service;
 
+import com.google.common.collect.Lists;
 import com.svn.gsheetsserviceaccount.model.Contact;
 import com.svn.gsheetsserviceaccount.repositories.ContactRepository;
 import com.svn.gsheetsserviceaccount.service.impl.ContactServiceImpl;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -104,5 +106,17 @@ public class ContactServiceImplTests {
         assertEquals("Значение code не должно быть пустым.", iae.getMessage());
         then(contactRepository).should(times(0))
                 .existsContactByCode((any(String.class)));
+    }
+
+    @Test
+    void testSaveAllContactsOk(){
+
+        List<Contact> contacts = Lists.newArrayList(this.contact);
+
+        given(contactRepository.saveAll(any())).willReturn(contacts);
+
+        List<Contact> actualContacts = contactService.saveAll(contacts);
+
+        assertNotNull(actualContacts);
     }
 }

@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -109,14 +111,47 @@ public class ContactServiceImplTests {
     }
 
     @Test
+    @DisplayName("5. Testing the save all contacts. Ok.")
+    @Order(5)
     void testSaveAllContactsOk(){
 
         List<Contact> contacts = Lists.newArrayList(this.contact);
 
-        given(contactRepository.saveAll(any())).willReturn(contacts);
+        given(contactRepository.saveAll(anyIterable())).willReturn(contacts);
 
         List<Contact> actualContacts = contactService.saveAll(contacts);
 
         assertNotNull(actualContacts);
+    }
+
+    @Test
+    @DisplayName("6. Testing the save all contacts. Empty list. Bad.")
+    @Order(6)
+    void testSaveAllContactsEmptyListBad(){
+
+        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
+                () -> contactService.saveAll(new ArrayList<>())
+        );
+
+        assertEquals("--- Список контактов должен содержать елементы. contacts: []", iae.getMessage());
+        then(contactRepository).should(times(0)).saveAll(anyIterable());
+
+    }
+
+    @Test
+    @DisplayName("7. Testing the save all contacts. Null contact. Bad.")
+    @Order(7)
+    void testSaveAllContactsNullContactBad(){
+
+        Contact nullContact=null;
+        List<Contact> contacts = Lists.newArrayList(nullContact);
+
+        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
+                () -> contactService.saveAll(contacts)
+        );
+
+        assertTrue(iae.getMessage().contains("--- В списке контактов не должно быть null элементов:"));
+        then(contactRepository).should(times(0)).saveAll(anyIterable());
+
     }
 }

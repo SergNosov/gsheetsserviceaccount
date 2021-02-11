@@ -38,7 +38,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> saveAll(List<Contact> contacts){//todo проверить как сохраняются данные
+    public List<Contact> saveAll(List<Contact> contacts){
         Assert.notEmpty(contacts,"--- Список контактов должен содержать елементы. contacts: "+contacts);
         Assert.noNullElements(contacts,"--- В списке контактов не должно быть null элементов: "+ contacts);
 

@@ -41,6 +41,11 @@ public class GSheetsController {
         return "dataTransferService complete";
     }
 
+    /**
+     * используется для тестирования сервиса
+     * @return
+     */
+
     @GetMapping("/add")
     public UserCard addContact() {
 
